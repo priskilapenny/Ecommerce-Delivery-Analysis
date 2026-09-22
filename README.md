@@ -8,8 +8,8 @@ This project analyzes supply chain and logistics data to identify:
 - How order volume and order value change over time?
 - How shipping costs vary across shipping methods and locations?
 - Which carriers provide the best balance between cost and delivery performance?
-- Does warehouse processing time contribute to delivery delays?
-- How delivery performance may relate to customer ratings and returns
+- Does warehouse processing time contribute to late delivery?
+- How does delivery performance relate to customer ratings and returns?
 
 ## Tech Stack
 
@@ -39,8 +39,8 @@ The dataset contains information:
 
 - Missing value checks
 - Duplicate value checks
-- Data type validation & correction
-- Creating delay days group and frequent order range group
+- Validate and transform data types
+- Create calculated categories such as delay day groups and order frequency groups
 
 ## Exploratory Data Analysis
 
@@ -56,9 +56,13 @@ The dataset contains information:
 - Delivery delay days distribution
 - Number of late deliveries by carrier
 
-### Data Model
+## Data Model
 
-### Dashboard Overview
+The Power BI data model was designed to support analysis across orders, customers, warehouses, shipping, delivery performance, and customer experience.
+<img width="995" height="756" alt="Data_Model" src="https://github.com/user-attachments/assets/7c4a7c20-cf4d-4bea-8350-65df64cc52ff" />
+
+
+## Dashboard Overview
 
 1. Business Overview
     - Total Orders
@@ -92,6 +96,6 @@ The dataset contains information:
     - Return rate by delivery delay days
     - Return reason distribution
 
-### Key Insight
+## Key Insight
 
-### Recommendation
+## Recommendation
