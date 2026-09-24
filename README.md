@@ -77,6 +77,16 @@ The Power BI data model was designed to support analysis across orders, customer
     - Total Shipping Cost
     - Average Shipping Cost per Order
     - On Time rate
+    
+    ```visual-basic
+    Total On-Time = CALCULATE(
+        COUNT(FactOrders[order_id]),
+        FactOrders[late_delivery]="No"
+    )
+    Total Orders = count(FactOrders[order_id])
+    On-Time Rate = [Total On-Time]/[Total Orders]
+    ```
+    
     - Total orders vs total order value by month
     - Total shipping cost vs on-time rate by month
     - Total late delivery vs on time delivery
@@ -86,11 +96,49 @@ The Power BI data model was designed to support analysis across orders, customer
     - On-Time rate
     - Late rate
     - Mode of delay day
+    
+    ```visual-basic
+    Mode of Delay Days = 
+    VAR DelayValues = FILTER(
+            VALUES('FactOrders'[delivery_delay_days]), 
+            'FactOrders'[delivery_delay_days]<>0
+    )
+    VAR FrequencyTable = ADDCOLUMNS(
+        DelayValues,
+        "Frequency",
+        CALCULATE(COUNTROWS('FactOrders'))
+    )
+    VAR MaxFrequency = MAXX(FrequencyTable, [Frequency])
+    RETURN
+    MAXX(
+        FILTER(
+            FrequencyTable,
+            [Frequency] = MaxFrequency
+        ),
+        'FactOrders'[delivery_delay_days]
+    )
+    ```
+    
     - Average warehouse processing hours
     - Average shipping costs per order
     - Late rate by month
     - Average warehouse processing hours by warehouse and month
     - Delay days distribution
+    
+    ```visual-basic
+    Delay Days Group = 
+    SWITCH(
+        TRUE(),
+        AND('FactOrders'[delivery_delay_days] > 0, FactOrders[delivery_delay_days] <= 2), "1-2 Days",
+        AND('FactOrders'[delivery_delay_days] > 2, FactOrders[delivery_delay_days] <= 4), "3-4 Days",
+        AND('FactOrders'[delivery_delay_days] > 4, FactOrders[delivery_delay_days] <= 6), "5-6 Days",
+        AND('FactOrders'[delivery_delay_days] > 6, FactOrders[delivery_delay_days] <= 8), "7-8 Days",
+        AND('FactOrders'[delivery_delay_days] > 8, FactOrders[delivery_delay_days] <= 10), "9-10 Days",
+        FactOrders[delivery_delay_days] > 10, "> 10 Days",
+        "0 Days"
+    )
+    ```
+    
     - Average shipping cost per order vs average delay days by carrier
     - Late rate vs. On-Time rate by warehouse processing time
 3. Customer Experience
