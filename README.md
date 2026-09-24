@@ -77,16 +77,16 @@ The Power BI data model was designed to support analysis across orders, customer
     - Total Shipping Cost
     - Average Shipping Cost per Order
     - On Time rate
-    
-    ```visual-basic
-    Total On-Time = CALCULATE(
-        COUNT(FactOrders[order_id]),
-        FactOrders[late_delivery]="No"
-    )
-    Total Orders = count(FactOrders[order_id])
-    On-Time Rate = [Total On-Time]/[Total Orders]
-    ```
-    
+        ```
+        Total On-Time = CALCULATE(
+            COUNT(FactOrders[order_id]),
+            FactOrders[late_delivery]="No"
+        )
+        
+        Total Orders = count(FactOrders[order_id])
+        
+        On-Time Rate = [Total On-Time]/[Total Orders]
+        ```
     - Total orders vs total order value by month
     - Total shipping cost vs on-time rate by month
     - Total late delivery vs on time delivery
@@ -96,52 +96,48 @@ The Power BI data model was designed to support analysis across orders, customer
     - On-Time rate
     - Late rate
     - Mode of delay day
-    
-    ```visual-basic
-    Mode of Delay Days = 
-    VAR DelayValues = FILTER(
-            VALUES('FactOrders'[delivery_delay_days]), 
-            'FactOrders'[delivery_delay_days]<>0
-    )
-    VAR FrequencyTable = ADDCOLUMNS(
-        DelayValues,
-        "Frequency",
-        CALCULATE(COUNTROWS('FactOrders'))
-    )
-    VAR MaxFrequency = MAXX(FrequencyTable, [Frequency])
-    RETURN
-    MAXX(
-        FILTER(
-            FrequencyTable,
-            [Frequency] = MaxFrequency
-        ),
-        'FactOrders'[delivery_delay_days]
-    )
-    ```
-    
+      ```
+      Mode of Delay Days = 
+        VAR DelayValues = FILTER(
+                VALUES('FactOrders'[delivery_delay_days]), 
+                'FactOrders'[delivery_delay_days]<>0
+        )
+        VAR FrequencyTable = ADDCOLUMNS(
+            DelayValues,
+            "Frequency",
+            CALCULATE(COUNTROWS('FactOrders'))
+        )
+        VAR MaxFrequency = MAXX(FrequencyTable, [Frequency])
+        RETURN
+        MAXX(
+            FILTER(
+                FrequencyTable,
+                [Frequency] = MaxFrequency
+            ),
+            'FactOrders'[delivery_delay_days]
+        )
+       ```    
     - Average warehouse processing hours
     - Average shipping costs per order
     - Late rate by month
     - Average warehouse processing hours by warehouse and month
     - Delay days distribution
-    
-    ```visual-basic
-    Delay Days Group = 
-    SWITCH(
-        TRUE(),
-        AND('FactOrders'[delivery_delay_days] > 0, FactOrders[delivery_delay_days] <= 2), "1-2 Days",
-        AND('FactOrders'[delivery_delay_days] > 2, FactOrders[delivery_delay_days] <= 4), "3-4 Days",
-        AND('FactOrders'[delivery_delay_days] > 4, FactOrders[delivery_delay_days] <= 6), "5-6 Days",
-        AND('FactOrders'[delivery_delay_days] > 6, FactOrders[delivery_delay_days] <= 8), "7-8 Days",
-        AND('FactOrders'[delivery_delay_days] > 8, FactOrders[delivery_delay_days] <= 10), "9-10 Days",
-        FactOrders[delivery_delay_days] > 10, "> 10 Days",
-        "0 Days"
-    )
-    ```
-    
+      ```
+      Delay Days Group = 
+            SWITCH(
+                TRUE(),
+                AND('FactOrders'[delivery_delay_days] > 0, FactOrders[delivery_delay_days] <= 2), "1-2 Days",
+                AND('FactOrders'[delivery_delay_days] > 2, FactOrders[delivery_delay_days] <= 4), "3-4 Days",
+                AND('FactOrders'[delivery_delay_days] > 4, FactOrders[delivery_delay_days] <= 6), "5-6 Days",
+                AND('FactOrders'[delivery_delay_days] > 6, FactOrders[delivery_delay_days] <= 8), "7-8 Days",
+                AND('FactOrders'[delivery_delay_days] > 8, FactOrders[delivery_delay_days] <= 10), "9-10 Days",
+                FactOrders[delivery_delay_days] > 10, "> 10 Days",
+                "0 Days"
+            )
+      ```
     - Average shipping cost per order vs average delay days by carrier
     - Late rate vs. On-Time rate by warehouse processing time
-3. Customer Experience
+4. Customer Experience
     - Median of customer rating
     - Median of repeat orders per customer
     - Return rate
@@ -149,6 +145,19 @@ The Power BI data model was designed to support analysis across orders, customer
     - Customer rating distribution
     - Customer rating by delivery delay days
     - Customer repeat order frequency
+      ```
+      Total Orders = CALCULATE(DISTINCTCOUNT('FactOrders'[order_id]))
+      
+      Order Group = 
+        SWITCH(
+            TRUE(),
+            [Total Orders] < 5, "< 5 Orders",
+            AND([Total Orders] > 5, [Total Orders] <= 10), "5-10 Orders",
+            AND([Total Orders] > 10, [Total Orders] <= 15), "11-15 Orders",
+            AND([Total Orders] > 15, [Total Orders] <= 20), "16-20 Orders",
+            "> 20 Orders"
+        )
+      ```
     - Return rate by delivery delay days
     - Return reason distribution
 
