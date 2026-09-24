@@ -116,6 +116,7 @@ The Power BI data model was designed to support analysis across orders, customer
 
 ### Recommendation
 
+- Review the international shipping strategy to identify opportunities to improve cost efficiency without compromising delivery performance.
 - Optimize carrier allocation by considering shipping costs, on-time delivery performance, and shipment volume.
 - Investigate operational bottlenecks in warehouses with higher processing times.
 - Prioritize short-delay reduction through improved dispatch scheduling and early delivery monitoring, as one-day delays represent the largest share of late deliveries.
